@@ -28,7 +28,7 @@ public class Maps {
         }
     }
     public static class lines extends ArrayList<String> {
-        private lines(){
+        public lines(){
 
         }
     }
