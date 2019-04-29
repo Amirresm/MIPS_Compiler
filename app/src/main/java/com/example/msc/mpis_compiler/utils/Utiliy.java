@@ -1,11 +1,18 @@
 package com.example.msc.mpis_compiler.utils;
 
+import android.widget.Toast;
+
 import com.example.msc.mpis_compiler.MainActivity;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Pattern;
+
+import static com.example.msc.mpis_compiler.utils.Logic.getMachineCode;
 
 /**
  * Created by eaz on 19/04/24.
@@ -14,9 +21,7 @@ import java.util.regex.Pattern;
 public class Utiliy {
 
 
-//    public static Integer pc = MainActivity.pc;
-//    public static Integer length = MainActivity.length;
-    public static HashMap<String, Integer> registers = MainActivity.registers;
+//    public static HashMap<String, Integer> registers = MainActivity.registers;
     public static ArrayList<String> lines = MainActivity.lines;
     public static HashMap<String, Integer> labels = MainActivity.labels;
     public static HashMap<String, String> oppCodes = MainActivity.oppCodes;
@@ -29,6 +34,13 @@ public class Utiliy {
     public static ArrayList<String> formatJ = MainActivity.formatJ;
 
 
+    public static void resetEverything(){
+        lines.clear();
+        labels.clear();
+        used.clear();
+        CounterProperties.pc = 0;
+        CounterProperties.length = 0;
+    }
 
     public static ArrayList<String> getSplitedList(String str) {
         if (str.contains("#")) { //delete from # to end

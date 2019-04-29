@@ -1,42 +1,40 @@
 package com.example.msc.mpis_compiler;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.msc.mpis_compiler.listener.EditorTextWatcher;
 import com.example.msc.mpis_compiler.utils.Maps;
 import com.example.msc.mpis_compiler.utils.Utiliy;
 
+import org.w3c.dom.Text;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static com.example.msc.mpis_compiler.utils.Logic.getMachineCode;
-import static com.example.msc.mpis_compiler.utils.Utiliy.checkLine;
+import static com.example.msc.mpis_compiler.utils.Logic.scanner;
 
 public class MainActivity extends AppCompatActivity {
 
     Button fileBt;
     Button compileBt;
     EditText codeEt;
+    TextView outputTV;
 
-//    int pc = 0;
-//    int length = 0;
 
-    public static HashMap<String, Integer> registers = new Maps.registers();
+//    public static HashMap<String, Integer> registers = new Maps.registers();
     public static ArrayList<String> lines = new Maps.lines();
     public static HashMap<String, Integer> labels = new Maps.labels();
     public static HashMap<String, String> oppCodes = new Maps.oppCodes();
@@ -56,9 +54,13 @@ public class MainActivity extends AppCompatActivity {
         Utiliy.CounterProperties.pc = 0;
         Utiliy.CounterProperties.length = 0;
 
+        getSupportActionBar().hide();
+
         fileBt = findViewById(R.id.file_bt);
         compileBt = findViewById(R.id.compile_bt);
         codeEt = findViewById(R.id.code_et);
+        outputTV= findViewById(R.id.output_tv);
+
         fileBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,32 +79,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String allCode = codeEt.getText().toString();
-                BufferedReader bufReader = new BufferedReader(new StringReader(allCode));
-                String line=null;
+                String binaryCode = null;
                 try {
-                    while( (line=bufReader.readLine()) != null )
-                    {
-                        if (line.length() > 0) {
-                            checkLine(line);
-                            Utiliy.CounterProperties.pc++;
-                            Utiliy.CounterProperties.length++;
-                        }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    binaryCode = scanner(allCode);
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this, "Code syntax error!", Toast.LENGTH_LONG).show();
+                    System.out.println(e);
+                    return;
                 }
-                if (used.size() > 0) {
-                    //System.exit(1);
-                    Toast.makeText(MainActivity.this, "used!!!!", Toast.LENGTH_LONG).show();
-                }
-                //Second scan:
-                StringBuilder sb = new StringBuilder();
-                Utiliy.CounterProperties.pc = 0;
-                while (Utiliy.CounterProperties.pc < Utiliy.CounterProperties.length) {
-                    sb.append(getMachineCode() + '\n');
-                    Utiliy.CounterProperties.pc++;
-                }
-                codeEt.setText(sb.toString());
+                outputTV.setText(binaryCode);
+                Utiliy.resetEverything();
             }
         });
 
@@ -115,10 +101,8 @@ public class MainActivity extends AppCompatActivity {
 
         // super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1001) {
-            Uri currFileURI = data.getData();
-
             try {
-                InputStream fis = getContentResolver().openInputStream(currFileURI);
+                InputStream fis = getContentResolver().openInputStream(data.getData());
                 BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
                 StringBuilder sb = new StringBuilder();
                 String line = null;

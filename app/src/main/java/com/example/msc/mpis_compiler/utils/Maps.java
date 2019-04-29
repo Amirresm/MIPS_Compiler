@@ -10,16 +10,6 @@ import java.util.HashMap;
  */
 
 public class Maps {
-//    public static HashMap<String, Integer> registers = new HashMap<>();
-//    public static ArrayList<String> lines = new ArrayList<>();
-//    public static HashMap<String, Integer> labels = new HashMap<>();
-//    public static HashMap<String, String> oppCodes = new HashMap<>();
-//    public static ArrayList<String> directives = new ArrayList<>();
-//    public static ArrayList<String> used = new ArrayList<>();
-//
-//    public static ArrayList<String> formatR = new ArrayList<>();
-//    public static ArrayList<String> formatI = new ArrayList<>();
-//    public static ArrayList<String> formatJ = new ArrayList<>();
     public Maps () {}
 
     public static class registers extends HashMap<String, Integer> {
@@ -100,21 +90,21 @@ public class Maps {
 
     public static class kwColorMap extends HashMap<String, Integer> {
         public kwColorMap() {
-            this.put("add", Color.RED);
-            this.put("sub", Color.RED);
-            this.put("slt", Color.RED);
-            this.put("or", Color.RED);
-            this.put("nand", Color.RED);
-            this.put("addi", Color.RED);
-            this.put("slti", Color.RED);
-            this.put("ori", Color.RED);
-            this.put("lui", Color.RED);
-            this.put("lw", Color.RED);
-            this.put("sw", Color.RED);
-            this.put("beq", Color.RED);
-            this.put("jalr", Color.RED);
-            this.put("j", Color.RED);
-            this.put("halt", Color.RED);
+            this.put(" add", Color.RED);
+            this.put(" sub", Color.RED);
+            this.put(" slt", Color.RED);
+            this.put(" or", Color.RED);
+            this.put(" nand", Color.RED);
+            this.put(" addi", Color.RED);
+            this.put(" slti", Color.RED);
+            this.put(" ori", Color.RED);
+            this.put(" lui", Color.RED);
+            this.put(" lw", Color.RED);
+            this.put(" sw", Color.RED);
+            this.put(" beq", Color.RED);
+            this.put(" jalr", Color.RED);
+            this.put(" j", Color.RED);
+            this.put(" halt", Color.RED);
         }
     }
 }

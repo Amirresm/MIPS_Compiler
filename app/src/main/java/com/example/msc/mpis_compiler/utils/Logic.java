@@ -2,9 +2,13 @@ package com.example.msc.mpis_compiler.utils;
 
 import com.example.msc.mpis_compiler.MainActivity;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.example.msc.mpis_compiler.utils.Utiliy.checkLine;
 import static com.example.msc.mpis_compiler.utils.Utiliy.getBinaryWithDigits;
 import static com.example.msc.mpis_compiler.utils.Utiliy.getDecimal;
 import static com.example.msc.mpis_compiler.utils.Utiliy.getSplitedList;
@@ -16,9 +20,7 @@ import static com.example.msc.mpis_compiler.utils.Utiliy.isNumeric;
 
 public class Logic {
 
-//    public static Integer pc = MainActivity.pc;
-//    public static Integer length = MainActivity.length;
-    public static HashMap<String, Integer> registers = MainActivity.registers;
+//    public static HashMap<String, Integer> registers = MainActivity.registers;
     public static ArrayList<String> lines = MainActivity.lines;
     public static HashMap<String, Integer> labels = MainActivity.labels;
     public static HashMap<String, String> oppCodes = MainActivity.oppCodes;
@@ -30,44 +32,6 @@ public class Logic {
     public static ArrayList<String> formatI = MainActivity.formatI;
     public static ArrayList<String> formatJ = MainActivity.formatJ;
 
-    public static void preProcess() {
-        oppCodes.put("add", "0000");
-        oppCodes.put("sub", "0001");
-        oppCodes.put("slt", "0010");
-        oppCodes.put("or", "0011");
-        oppCodes.put("nand", "0100");
-        oppCodes.put("addi", "0101");
-        oppCodes.put("slti", "0110");
-        oppCodes.put("ori", "0111");
-        oppCodes.put("lui", "1000");
-        oppCodes.put("lw", "1001");
-        oppCodes.put("sw", "1010");
-        oppCodes.put("beq", "1011");
-        oppCodes.put("jalr", "1101");
-        oppCodes.put("j", "1101");
-        oppCodes.put("halt", "1110");
-    }
-
-    public static void preProcessFormates() {
-        formatR.add("add");
-        formatR.add("sub");
-        formatR.add("slt");
-        formatR.add("or");
-        formatR.add("nand");
-
-        formatI.add("addi");
-        formatI.add("ori");
-        formatI.add("slti");
-        formatI.add("bne");
-        formatI.add("beq");
-        formatI.add("sw");
-        formatI.add("lw");
-        formatI.add("jalr");
-        formatI.add("lui");
-
-        formatJ.add("j");
-        formatJ.add("halt");
-    }
 
     public static String getMachineCode() {
         String binary = " ";
@@ -144,4 +108,33 @@ public class Logic {
 
         return answer;
     }
+
+    public static String scanner(String asCode) {
+        BufferedReader bufReader = new BufferedReader(new StringReader(asCode));
+        String line=null;
+        try {
+            while( (line=bufReader.readLine()) != null )
+            {
+                if (line.length() > 0) {
+                    checkLine(line);
+                    Utiliy.CounterProperties.pc++;
+                    Utiliy.CounterProperties.length++;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (used.size() > 0) {
+            //System.exit(1);
+        }
+        //Second scan:
+        StringBuilder sb = new StringBuilder();
+        Utiliy.CounterProperties.pc = 0;
+        while (Utiliy.CounterProperties.pc < Utiliy.CounterProperties.length) {
+            sb.append(getMachineCode() + '\n');
+            Utiliy.CounterProperties.pc++;
+        }
+        return sb.toString();
+    }
+
 }
