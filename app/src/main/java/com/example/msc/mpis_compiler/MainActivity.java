@@ -71,7 +71,12 @@ public class MainActivity extends AppCompatActivity {
         compileBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if(state.errors.isEmpty()) {
+                    String output = Utility.mainScan(maps, state, codeEt.getText().toString());
+                    outputTV.setText(output);
+                }
+                else
+                    Toast.makeText(MainActivity.this, "Please fix the following errors before compiling: " + Utility.reportErrors(state),Toast.LENGTH_LONG).show();
             }
         });
 
@@ -87,10 +92,10 @@ public class MainActivity extends AppCompatActivity {
                 InputStream fis = getContentResolver().openInputStream(data.getData());
                 BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
                 StringBuilder sb = new StringBuilder();
-                String line = null;
+                String line;
                 while ((line = reader.readLine()) != null)
                 {
-                    sb.append(line + "\n");
+                    sb.append(line).append("\n");
                 }
                 codeEt.setText(sb.toString());
                 //Utility.firstScan(maps, state, sb.toString());
