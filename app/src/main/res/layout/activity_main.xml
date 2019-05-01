@@ -24,19 +24,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_below="@id/welcome_text">
+        android:layout_below="@id/welcome_text"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
         <Button
             android:id="@+id/file_bt"
+            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:text="Open..."/>
         <Button
-            android:id="@+id/compile_bt"
+            android:id="@+id/new_bt"
+            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="Compile"/>
+            android:text="New Project"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,7 +50,7 @@
         android:padding="10dp">
         <EditText
             android:id="@+id/code_et"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="top|left"
@@ -56,9 +60,16 @@
             android:id="@+id/output_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:layout_marginTop="2dp"
-            android:background="#6c6a6a"/>
+            android:background="#6c6a6a"
+            android:isScrollContainer="true"/>
+        <Button
+            android:id="@+id/compile_bt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Compile"/>
     </LinearLayout>
 
 </RelativeLayout>
