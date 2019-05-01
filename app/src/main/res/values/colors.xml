@@ -3,4 +3,15 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="commentColor">#a697ac</color>
+    <color name="oppCodeColor">#e1c188</color>
+    <color name="labelColor">#abb47f</color>
+    <color name="errorColor">#ac686d</color>
+    <color name="directiveColor">#7b94b0</color>
+    <color name="editorTextColor">#c9c3cc</color>
+    <color name="editorBackground">#26272e</color>
+    <color name="previewTextColor">#c9c3cc</color>
+    <color name="previewBackground">#22253d</color>
+    <color name="buttonColor">#68451e</color>
 </resources>

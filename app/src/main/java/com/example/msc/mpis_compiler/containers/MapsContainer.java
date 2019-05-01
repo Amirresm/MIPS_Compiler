@@ -1,6 +1,11 @@
 package com.example.msc.mpis_compiler.containers;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
+
+import com.example.msc.mpis_compiler.R;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -8,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by msc on 01/05/2019.
+ * Created by Amirreza on 25/04/2019.
  */
 
 public class MapsContainer {
@@ -20,7 +25,7 @@ public class MapsContainer {
     public HashMap<String, Integer> kwColorMap = new HashMap<>();
     public HashMap<String, Integer> labelsColorMap = new HashMap<>();
     public HashMap<String, Integer> errorsColorMap = new HashMap<>();
-    public MapsContainer() {
+    public MapsContainer(Context context) {
         directives.add(".fill");
         directives.add(".space");
 
@@ -43,26 +48,29 @@ public class MapsContainer {
         oppCodes.put("j", new AbstractMap.SimpleEntry<>("1101","j"));
         oppCodes.put("halt", new AbstractMap.SimpleEntry<>("1110","j"));
 
+        int oppCodeColor = ContextCompat.getColor(context, R.color.oppCodeColor);
+        int directiveColor = ContextCompat.getColor(context, R.color.directiveColor);
+        int commentColor = ContextCompat.getColor(context, R.color.commentColor);
 
-        kwColorMap.put("add", Color.parseColor("#CC6F50"));
-        kwColorMap.put("sub", Color.parseColor("#CC6F50"));
-        kwColorMap.put("slt", Color.parseColor("#CC6F50"));
-        kwColorMap.put("or", Color.parseColor("#CC6F50"));
-        kwColorMap.put("nand", Color.parseColor("#CC6F50"));
-        kwColorMap.put("addi", Color.parseColor("#CC6F50"));
-        kwColorMap.put("slti", Color.parseColor("#CC6F50"));
-        kwColorMap.put("ori", Color.parseColor("#CC6F50"));
-        kwColorMap.put("lui", Color.parseColor("#CC6F50"));
-        kwColorMap.put("lw", Color.parseColor("#CC6F50"));
-        kwColorMap.put("sw", Color.parseColor("#CC6F50"));
-        kwColorMap.put("beq", Color.parseColor("#CC6F50"));
-        kwColorMap.put("jalr", Color.parseColor("#CC6F50"));
-        kwColorMap.put("j", Color.parseColor("#CC6F50"));
-        kwColorMap.put("halt", Color.parseColor("#CC6F50"));
+        kwColorMap.put("add", oppCodeColor);
+        kwColorMap.put("sub", oppCodeColor);
+        kwColorMap.put("slt", oppCodeColor);
+        kwColorMap.put("or", oppCodeColor);
+        kwColorMap.put("nand", oppCodeColor);
+        kwColorMap.put("addi", oppCodeColor);
+        kwColorMap.put("slti", oppCodeColor);
+        kwColorMap.put("ori", oppCodeColor);
+        kwColorMap.put("lui", oppCodeColor);
+        kwColorMap.put("lw", oppCodeColor);
+        kwColorMap.put("sw", oppCodeColor);
+        kwColorMap.put("beq", oppCodeColor);
+        kwColorMap.put("jalr", oppCodeColor);
+        kwColorMap.put("j", oppCodeColor);
+        kwColorMap.put("halt", oppCodeColor);
 
-        kwColorMap.put(".fill", Color.parseColor("#E2BA68"));
-        kwColorMap.put(".space", Color.parseColor("#E2BA68"));
+        kwColorMap.put(".fill", directiveColor);
+        kwColorMap.put(".space", directiveColor);
 
-        kwColorMap.put("comment", Color.parseColor("#336270"));
+        kwColorMap.put("comment", commentColor);
     }
 }

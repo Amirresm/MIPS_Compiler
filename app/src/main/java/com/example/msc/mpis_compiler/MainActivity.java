@@ -8,12 +8,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.msc.mpis_compiler.containers.CompileState;
 import com.example.msc.mpis_compiler.listeners.EditorTextWatcher;
 import com.example.msc.mpis_compiler.containers.MapsContainer;
 import com.example.msc.mpis_compiler.utilities.Utility;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -29,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     TextView outputTV;
 
 
-    public static MapsContainer maps = new MapsContainer();
+    public static MapsContainer maps;
     public static CompileState state = new CompileState();
 
 
@@ -39,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         getSupportActionBar().hide();
+        maps = new MapsContainer(this);
 
         fileBt = findViewById(R.id.file_bt);
         newBt = findViewById(R.id.new_bt);
@@ -63,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 codeEt.setText("");
                 outputTV.setText("");
+                Utility.resetAll(maps,state);
             }
         });
 

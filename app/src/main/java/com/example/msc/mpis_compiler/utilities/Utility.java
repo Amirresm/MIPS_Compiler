@@ -1,13 +1,17 @@
 package com.example.msc.mpis_compiler.utilities;
 
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 
+import com.example.msc.mpis_compiler.R;
 import com.example.msc.mpis_compiler.containers.CompileState;
 import com.example.msc.mpis_compiler.containers.MapsContainer;
-
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
+/**
+ * Created by Amirreza on 25/04/2019.
+ */
 
 public class Utility {
     private static HashMap<String, String> lineToElements (MapsContainer maps, String line) {
@@ -15,6 +19,7 @@ public class Utility {
         if (line.contains("#"))
             line = line.substring(0, line.indexOf("#"));
         line = line.replaceAll(",*\\s+,*",",");
+        line = line.replaceAll(",+",",");
         String[] splitString = line.split(",");
         String[] elmnts = {"","","","",""};
         if(splitString.length >= 1)
@@ -102,15 +107,18 @@ public class Utility {
         }
     }
 
+    public static void resetAll(MapsContainer maps, CompileState state) {
+        maps.labelsColorMap.clear();
+        maps.labels.clear();
+        maps.dupLabels.clear();
+        maps.errorsColorMap.clear();
+        state.errors.clear();
+    }
     public static boolean firstScan(MapsContainer maps, CompileState state, String codeText) {
 //        System.out.println("scan for labels");
         if(!state.isScannedForLabels) {
             //on each scan we start over
-            maps.labelsColorMap.clear();
-            maps.labels.clear();
-            maps.dupLabels.clear();
-            maps.errorsColorMap.clear();
-            state.errors.clear();
+            resetAll(maps, state);
             state.isScannedForLabels = true;
 
             String[] lines = codeText.split("\\r?\\n");
@@ -188,7 +196,6 @@ public class Utility {
             //update label colors
             for (String label : maps.labels.keySet())
                 maps.labelsColorMap.put(label, Color.parseColor("#206F50"));
-//            System.out.println("labels " + maps.labels.size() + " | lblkw " + maps.labelsColorMap.size());
             return true;
         }
         return true;

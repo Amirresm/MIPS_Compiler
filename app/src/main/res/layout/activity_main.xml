@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#40555b"
+    android:background="@drawable/background"
     tools:context="com.example.msc.mpis_compiler.MainActivity">
 
     <TextView
@@ -33,6 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+
             android:text="Open..."/>
         <Button
             android:id="@+id/new_bt"
@@ -55,14 +56,16 @@
             android:layout_height="wrap_content"
             android:gravity="top|left"
             android:layout_marginBottom="2dp"
-            android:background="#949292"/>
+            android:background="@drawable/editorbackground"
+            android:textColor="@color/editorTextColor"/>
         <TextView
             android:id="@+id/output_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginTop="2dp"
-            android:background="#6c6a6a"
+            android:background="@drawable/previewbackground"
+            android:textColor="@color/previewTextColor"
             android:isScrollContainer="true"/>
         <Button
             android:id="@+id/compile_bt"
