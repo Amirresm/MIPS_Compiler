@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
+    android:orientation="vertical"
     tools:context="com.example.msc.mpis_compiler.MainActivity">
 
     <TextView
         android:id="@+id/welcome_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:text="MIPS"
         android:textSize="40sp"
         android:textStyle="bold"
+        android:layout_gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -32,7 +33,6 @@
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
 
             android:text="Open..."/>
         <Button
@@ -40,7 +40,6 @@
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:text="New Project"/>
     </LinearLayout>
     <TextView
@@ -48,40 +47,54 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Unnamed"
-        android:layout_below="@id/layer_bts"/>
+        android:text="Unnamed"/>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:orientation="vertical"
-        android:layout_below="@id/filename_tv"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="5dp">
-        <EditText
-            android:id="@+id/code_et"
+        <LinearLayout
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="top|left"
-            android:layout_marginBottom="2dp"
             android:background="@drawable/editorbackground"
-            android:textColor="@color/editorTextColor"/>
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/linecounter_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                android:textColor="#575a5c"
+                android:text="1"
+                android:textSize="16sp"/>
+            <EditText
+                android:id="@+id/code_et"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top|left"
+                android:layout_marginBottom="2dp"
+                android:background="#00ffffff"
+                android:textSize="16sp"
+                android:textColor="@color/editorTextColor"/>
+        </LinearLayout>
         <TextView
             android:id="@+id/output_tv"
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginTop="2dp"
             android:background="@drawable/previewbackground"
             android:textColor="@color/previewTextColor"
-            android:isScrollContainer="true"/>
-        <Button
-            android:id="@+id/compile_bt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="Compile"/>
-    </LinearLayout>
+            android:scrollbars="vertical"/>
 
-</RelativeLayout>
+    </LinearLayout>
+    <Button
+        android:id="@+id/compile_bt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Compile"/>
+
+</LinearLayout>

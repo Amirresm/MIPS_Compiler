@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.msc.mpis_compiler.R;
 import com.example.msc.mpis_compiler.containers.CompileState;
@@ -28,16 +29,18 @@ public class EditorTextWatcher implements TextWatcher {
     private final EditText etMain;
     private final MapsContainer maps;
     private final CompileState state;
+    TextView lineCounterTV;
     int errorColor;
     int labelColor;
 
-    public EditorTextWatcher(Context context, EditText et, MapsContainer hm, CompileState state) {
+    public EditorTextWatcher(Context context, EditText et, MapsContainer hm, CompileState state, TextView lineCounterTV) {
         this.context = context;
         this.etMain = et;
         this.maps = hm;
         this.state = state;
         errorColor = ContextCompat.getColor(context, R.color.errorColor);
         labelColor = ContextCompat.getColor(context, R.color.labelColor);
+        this.lineCounterTV = lineCounterTV;
     }
 
 
@@ -47,6 +50,19 @@ public class EditorTextWatcher implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        int lineCount = 1;
+        lineCounterTV.setText("");
+        for (int i = 0; i < s.length(); i++) {
+            if(s.charAt(i) == '\n') {
+                lineCount++;
+            }
+        }
+        for (int i = 0; i < lineCount; i++) {
+                lineCounterTV.setText(lineCounterTV.getText().toString() + (i + 1) + "\n");
+        }
+        lineCounterTV.setScrollY(etMain.getScrollY());
+
         state.isScannedForLabels = false;
         if(!Utility.firstScan(maps, state, etMain.getText().toString())) {
 

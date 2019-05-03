@@ -4,9 +4,12 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     EditText codeEt;
     TextView outputTV;
     TextView filenameTV;
+    TextView lineCounterTV;
 
     String fileName = "";
     public static String defaultSaveName = "";
@@ -41,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     public static CompileState state = new CompileState();
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,8 +60,18 @@ public class MainActivity extends AppCompatActivity {
         codeEt = findViewById(R.id.code_et);
         outputTV = findViewById(R.id.output_tv);
         filenameTV = findViewById(R.id.filename_tv);
+        lineCounterTV = findViewById(R.id.linecounter_tv);
+
+        codeEt.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                lineCounterTV.setScrollY(codeEt.getScrollY());
+            }
+        });
 
 
+        outputTV.setMovementMethod(new ScrollingMovementMethod());
+        //lineCounterTV.setMovementMethod(new ScrollingMovementMethod());
         ActivityCompat.requestPermissions(MainActivity.this,
                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 1);
@@ -83,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        codeEt.addTextChangedListener(new EditorTextWatcher(this, codeEt, maps, state));
+        codeEt.addTextChangedListener(new EditorTextWatcher(this, codeEt, maps, state, lineCounterTV));
 
         compileBt.setOnClickListener(new View.OnClickListener() {
             @Override
