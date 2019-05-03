@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.msc.mpis_compiler.MainActivity;
 import com.example.msc.mpis_compiler.containers.CompileState;
 import com.example.msc.mpis_compiler.containers.MapsContainer;
 
@@ -325,11 +326,14 @@ public class Utility {
         return errors;
     }
 
-    public static void saveFile(final Context context, final String output, String defaultSaveName) {
+    public static void saveFile(final Context context, final String output, final String defaultSaveName) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Save as...");
         final EditText input = new EditText(context);
-        input.setText(defaultSaveName.substring(0, defaultSaveName.lastIndexOf(".")) + ".mc");
+        if (!defaultSaveName.isEmpty() && defaultSaveName.contains(".ac"))
+            input.setText(defaultSaveName.substring(0, defaultSaveName.lastIndexOf(".ac")));
+        else
+            input.setText(defaultSaveName);
         builder.setView(input);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -359,17 +363,26 @@ public class Utility {
                                         Environment.getExternalStorageDirectory() + File.separator + "MIPS" + File.separator;
                                 File folder = new File(path);
                                 folder.mkdirs();
-                                File file = new File(folder, saveName);
+                                File file = new File(folder, saveName + ".mc");
                                 System.out.println(file.toString());
-                                if(file.createNewFile()) {
+                                boolean overwrite = true;
+                                if(!file.exists()) {
+                                    file.createNewFile();
+                                    overwrite = false;
+                                }
+                                if(file.exists()) {
                                     FileOutputStream outPutStream = new FileOutputStream(file);
                                     OutputStreamWriter outPutStreamWriter = new OutputStreamWriter(outPutStream);
                                     outPutStreamWriter.append(output);
                                     outPutStreamWriter.close();
                                     outPutStream.flush();
                                     outPutStream.close();
-                                    Toast.makeText(context, "File saved as " + saveName + " successfully!", Toast.LENGTH_SHORT).show();
+                                    MainActivity.defaultSaveName = saveName;
                                 }
+                                if(!overwrite)
+                                    Toast.makeText(context, "File saved as " + saveName + ".mc successfully!", Toast.LENGTH_SHORT).show();
+                                else
+                                    Toast.makeText(context, "File overwritten as " + saveName + ".mc successfully!", Toast.LENGTH_SHORT).show();
                             } catch (IOException e) {
                                 Toast.makeText(context, "Error happened while saving the file!", Toast.LENGTH_SHORT).show();
                                 e.printStackTrace();

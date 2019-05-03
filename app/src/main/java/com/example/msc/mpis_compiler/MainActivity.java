@@ -32,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
     EditText codeEt;
     TextView outputTV;
 
-    Uri filePath;
+    String fileName = "";
+    public static String defaultSaveName = "";
+
 
     public static MapsContainer maps;
     public static CompileState state = new CompileState();
@@ -74,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 codeEt.setText("");
                 outputTV.setText("");
+                defaultSaveName = "";
                 Utility.resetAll(maps, state);
             }
         });
@@ -88,9 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 if (state.errors.isEmpty()) {
                     final String output = Utility.mainScan(maps, state, codeEt.getText().toString());
                     outputTV.setText(output);
-
-                    String fileName = filePath.getPath().substring(filePath.getPath().lastIndexOf("/") + 1);
-                    Utility.saveFile(MainActivity.this, output, fileName);
+                    Utility.saveFile(MainActivity.this, output, defaultSaveName);
                 } else
                     Toast.makeText(MainActivity.this, "Please fix the following errors before compiling: " + Utility.reportErrors(state), Toast.LENGTH_LONG).show();
             }
@@ -106,7 +107,8 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1001) {
             try {
                 if (data != null) {
-                    filePath = data.getData();
+                    Uri filePath = data.getData();
+                    fileName = filePath.getPath().substring(filePath.getPath().lastIndexOf("/") + 1);
                     InputStream fis = getContentResolver().openInputStream(filePath);
                     BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
                     StringBuilder sb = new StringBuilder();
@@ -115,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                         sb.append(line).append("\n");
                     }
                     codeEt.setText(sb.toString());
-//                    Toast.makeText(this, "Code loaded.", Toast.LENGTH_SHORT).show();
+                    defaultSaveName = fileName;
                 }
             } catch (FileNotFoundException e) {
                 Toast.makeText(this, "File not found!", Toast.LENGTH_SHORT).show();
