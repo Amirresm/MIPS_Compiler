@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     Button compileBt;
     EditText codeEt;
     TextView outputTV;
+    TextView filenameTV;
 
     String fileName = "";
     public static String defaultSaveName = "";
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         compileBt = findViewById(R.id.compile_bt);
         codeEt = findViewById(R.id.code_et);
         outputTV = findViewById(R.id.output_tv);
+        filenameTV = findViewById(R.id.filename_tv);
 
 
         ActivityCompat.requestPermissions(MainActivity.this,
@@ -108,7 +110,9 @@ public class MainActivity extends AppCompatActivity {
             try {
                 if (data != null) {
                     Uri filePath = data.getData();
-                    fileName = filePath.getPath().substring(filePath.getPath().lastIndexOf("/") + 1);
+                    fileName = Utility.getFileName(MainActivity.this, filePath);
+                    filenameTV.setText(fileName);
+                    System.out.println(filePath);
                     InputStream fis = getContentResolver().openInputStream(filePath);
                     BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
                     StringBuilder sb = new StringBuilder();

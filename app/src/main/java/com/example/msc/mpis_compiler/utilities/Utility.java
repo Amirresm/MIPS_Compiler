@@ -2,8 +2,11 @@ package com.example.msc.mpis_compiler.utilities;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.OpenableColumns;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
@@ -330,8 +333,8 @@ public class Utility {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Save as...");
         final EditText input = new EditText(context);
-        if (!defaultSaveName.isEmpty() && defaultSaveName.contains(".ac"))
-            input.setText(defaultSaveName.substring(0, defaultSaveName.lastIndexOf(".ac")));
+        if (!defaultSaveName.isEmpty() && defaultSaveName.contains(".as"))
+            input.setText(defaultSaveName.substring(0, defaultSaveName.lastIndexOf(".as")));
         else
             input.setText(defaultSaveName);
         builder.setView(input);
@@ -360,7 +363,7 @@ public class Utility {
                             String saveName = input.getText().toString();
                             try {
                                 String path =
-                                        Environment.getExternalStorageDirectory() + File.separator + "MIPS" + File.separator;
+                                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + "MIPS" + File.separator;
                                 File folder = new File(path);
                                 folder.mkdirs();
                                 File file = new File(folder, saveName + ".mc");
@@ -394,5 +397,27 @@ public class Utility {
             }
         });
         alertDialog.show();
+    }
+
+    public static String getFileName(Context context, Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
     }
 }
