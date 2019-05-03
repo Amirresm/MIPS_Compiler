@@ -1,11 +1,22 @@
 package com.example.msc.mpis_compiler.utilities;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
+import android.os.Environment;
+import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-import com.example.msc.mpis_compiler.R;
 import com.example.msc.mpis_compiler.containers.CompileState;
 import com.example.msc.mpis_compiler.containers.MapsContainer;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -187,6 +198,22 @@ public class Utility {
                         }
                     }
                 }
+                //rs, rt, rd format errors
+                if(elements.containsKey("rs")) {
+                    String value = elements.get("rs");
+                    if(!value.matches("\\d+"))
+                        state.errors.add(ERROR.PARAMETER);
+                }
+                if(elements.containsKey("rt")) {
+                    String value = elements.get("rt");
+                    if(!value.matches("\\d+"))
+                        state.errors.add(ERROR.PARAMETER);
+                }
+                if(elements.containsKey("rd")) {
+                    String value = elements.get("rd");
+                    if(!value.matches("\\d+"))
+                        state.errors.add(ERROR.PARAMETER);
+                }
                 //unknown syntax errors
                 if(elements.containsKey("ERROR")) {
                     state.errors.add(ERROR.OPPCODE);
@@ -278,7 +305,8 @@ public class Utility {
         UNKNOWNLABEL,
         DUPLICATELABEL,
         OFFSET,
-        OPPCODE
+        OPPCODE,
+        PARAMETER
     }
 
     public static String reportErrors (CompileState state) {
@@ -291,7 +319,67 @@ public class Utility {
             errors += "\"Incorrect Offset\" ";
         if (state.errors.contains(ERROR.OPPCODE))
             errors += "\"Incorrect OppCode\" ";
+        if (state.errors.contains(ERROR.PARAMETER))
+            errors += "\"Incorrect Parameter\" ";
         errors = errors.trim();
         return errors;
+    }
+
+    public static void saveFile(final Context context, final String output, String defaultSaveName) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Save as...");
+        final EditText input = new EditText(context);
+        input.setText(defaultSaveName.substring(0, defaultSaveName.lastIndexOf(".")) + ".mc");
+        builder.setView(input);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button b = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(input.getText().toString().isEmpty())
+                            Toast.makeText(context, "File name cannot be empty!", Toast.LENGTH_SHORT).show();
+                        else {
+                            String saveName = input.getText().toString();
+                            try {
+                                String path =
+                                        Environment.getExternalStorageDirectory() + File.separator + "MIPS" + File.separator;
+                                File folder = new File(path);
+                                folder.mkdirs();
+                                File file = new File(folder, saveName);
+                                System.out.println(file.toString());
+                                if(file.createNewFile()) {
+                                    FileOutputStream outPutStream = new FileOutputStream(file);
+                                    OutputStreamWriter outPutStreamWriter = new OutputStreamWriter(outPutStream);
+                                    outPutStreamWriter.append(output);
+                                    outPutStreamWriter.close();
+                                    outPutStream.flush();
+                                    outPutStream.close();
+                                    Toast.makeText(context, "File saved as " + saveName + " successfully!", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (IOException e) {
+                                Toast.makeText(context, "Error happened while saving the file!", Toast.LENGTH_SHORT).show();
+                                e.printStackTrace();
+                            }
+                            alertDialog.dismiss();
+                        }
+                    }
+                });
+            }
+        });
+        alertDialog.show();
     }
 }
