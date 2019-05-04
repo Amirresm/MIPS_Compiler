@@ -11,14 +11,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.msc.mpis_compiler.containers.CompileState;
 import com.example.msc.mpis_compiler.listeners.EditorTextWatcher;
 import com.example.msc.mpis_compiler.containers.MapsContainer;
+import com.example.msc.mpis_compiler.utilities.SpaceTokenizer;
 import com.example.msc.mpis_compiler.utilities.Utility;
 
 import java.io.BufferedReader;
@@ -26,17 +29,18 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     Button fileBt;
     Button newBt;
     Button compileBt;
-    EditText codeEt;
+    MultiAutoCompleteTextView codeEt;
     TextView outputTV;
     TextView filenameTV;
     TextView lineCounterTV;
-
+    ArrayList<String> instructionList;
     String fileName = "";
     public static String defaultSaveName = "";
 
@@ -68,7 +72,10 @@ public class MainActivity extends AppCompatActivity {
                 lineCounterTV.setScrollY(codeEt.getScrollY());
             }
         });
-
+        fillInstructionList();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,instructionList);
+        codeEt.setAdapter(adapter);
+        codeEt.setTokenizer(new SpaceTokenizer());
 
         outputTV.setMovementMethod(new ScrollingMovementMethod());
         //lineCounterTV.setMovementMethod(new ScrollingMovementMethod());
@@ -166,5 +173,24 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+    private void fillInstructionList() {
+        instructionList = new ArrayList<>();
+        instructionList.add("add");
+        instructionList.add("sub");
+        instructionList.add("slt");
+        instructionList.add("or");
+        instructionList.add("nand");
+        instructionList.add("addi");
+        instructionList.add("slti");
+        instructionList.add("ori");
+        instructionList.add("slti");
+        instructionList.add("lui");
+        instructionList.add("lw");
+        instructionList.add("sw");
+        instructionList.add("beq");
+        instructionList.add("jalr");
+        instructionList.add("j");
+        instructionList.add("halt");
+    };
 
 }
