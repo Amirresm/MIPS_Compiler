@@ -205,17 +205,17 @@ public class Utility {
                 //rs, rt, rd format errors
                 if(elements.containsKey("rs")) {
                     String value = elements.get("rs");
-                    if(!value.matches("\\d+"))
+                    if(!value.matches("\\d+")||Integer.parseInt(elements.get("rs"))>16)
                         state.errors.add(ERROR.PARAMETER);
                 }
                 if(elements.containsKey("rt")) {
                     String value = elements.get("rt");
-                    if(!value.matches("\\d+"))
+                    if(!value.matches("\\d+")||Integer.parseInt(elements.get("rt"))>16)
                         state.errors.add(ERROR.PARAMETER);
                 }
                 if(elements.containsKey("rd")) {
                     String value = elements.get("rd");
-                    if(!value.matches("\\d+"))
+                    if(!value.matches("\\d+")||Integer.parseInt(elements.get("rd"))>16)
                         state.errors.add(ERROR.PARAMETER);
                 }
                 //unknown syntax errors
